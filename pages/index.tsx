@@ -1,9 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+// @ts-ignore
 import clientPromise from '../lib/mongodb'
 import styles from '../styles/Home.module.css'
 
+// @ts-ignore
 const Home: NextPage = ({ isConnected }) => {
   return (
     <div className={styles.container}>
@@ -80,8 +82,10 @@ const Home: NextPage = ({ isConnected }) => {
 }
 
 export default Home
+// @ts-ignore
 export async function getServerSideProps(context) {
   try {
+// @ts-ignore
     await clientPromise
     // `await clientPromise` will use the default database passed in the MONGODB_URI
     // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
