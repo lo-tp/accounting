@@ -7,7 +7,7 @@
       "@typescript-eslint/type-annotation-spacing": ["warn", {
           "before": false,
           "after": true
-      }]
+      }],
+      "react/jsx-indent": [2,2, {"checkAttributes": true, "indentLogicalExpressions": true}]
   }
-
 }

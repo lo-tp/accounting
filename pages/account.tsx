@@ -5,11 +5,11 @@ const Home: NextPage<{ accounts: account[] }> = ({ accounts }) => {
   return (
     <ul>
       {accounts.map(({ id, name, initialValue, currentValue }) => (
-    <li key={id}>
-    <span>{name}</span>
-    <span> {initialValue}</span>
-    <span> {currentValue}</span>
-    </li>
+        <li key={id}>
+          <h1>{name}</h1>
+          <span> {initialValue}</span>
+          <span> {currentValue}</span>
+        </li>
       ))}
     </ul>
   );
