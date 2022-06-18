@@ -8,6 +8,9 @@
           "before": false,
           "after": true
       }],
-      "react/jsx-indent": [2,2, {"checkAttributes": true, "indentLogicalExpressions": true}]
+      "react/jsx-indent": [2,2, {"checkAttributes": true, "indentLogicalExpressions": true}],
+      "react/jsx-indent-props": [2,2],
+      "react/jsx-closing-bracket-location": [2, "tag-aligned"],
+      "react/jsx-first-prop-new-line": [2, "multiline"]
   }
 }
