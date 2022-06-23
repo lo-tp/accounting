@@ -1,10 +1,10 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import clientPromise from '../lib/mongodb'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import clientPromise from '../lib/mongodb';
+import styles from '../styles/Home.module.css';
 
-const Home: NextPage<{isConnected: boolean}> = ({ isConnected }) => {
+const Home: NextPage<{ isConnected: boolean }> = ({ isConnected }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -54,12 +54,12 @@ const Home: NextPage<{isConnected: boolean}> = ({ isConnected }) => {
         </div>
                 {isConnected ? (
           <h2 className="subtitle">You are connected to MongoDB</h2>
-        ) : (
+                ) : (
           <h2 className="subtitle">
             You are NOT connected to MongoDB. Check the <code>README.md</code>{' '}
             for instructions.
           </h2>
-        )}
+                )}
 
       </main>
 
@@ -76,13 +76,13 @@ const Home: NextPage<{isConnected: boolean}> = ({ isConnected }) => {
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 export async function getServerSideProps() {
   try {
-    await clientPromise
+    await clientPromise;
     // `await clientPromise` will use the default database passed in the MONGODB_URI
     // However you can use another database (e.g. myDatabase) by replacing the `await clientPromise` with the following code:
     //
@@ -94,11 +94,11 @@ export async function getServerSideProps() {
 
     return {
       props: { isConnected: true },
-    }
+    };
   } catch (e) {
-    console.error(e)
+    console.error(e);
     return {
       props: { isConnected: false },
-    }
+    };
   }
 }
