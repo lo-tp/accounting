@@ -1,13 +1,18 @@
-import { FC, ReactNode } from 'react';
+import classNames from 'classnames';
+import { FC, ReactNode, useMemo } from 'react';
 
 export const Modal: FC<{
   onConfirm: ()=> void;
+  onCancel: ()=> void;
   title: string;
   id: string;
+  open: boolean;
   children: ReactNode 
-}> = ({ id, children, title, onConfirm })  => {
+}> = ({ onCancel, id, children, title, onConfirm, open })  => {
+  const mainClass = classNames('modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto', { show:open });
+  const mainStyle = useMemo(() => ({ display:open ? 'block' : 'none' }), [open]);
   return (
-    <div className="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto" id={id} tabIndex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
+    <div style={mainStyle} className={mainClass} id={id} tabIndex={-1} aria-labelledby="exampleModalCenterTitle" aria-hidden="true" aria-modal={open} role="dialog">
       <div className="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
         <div className="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
           <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
@@ -29,7 +34,7 @@ export const Modal: FC<{
             <button
               type="button"
               className="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-              data-bs-dismiss="modal"
+              onClick={onCancel}
             >
               Cancel
             </button>
