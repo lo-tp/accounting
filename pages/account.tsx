@@ -1,35 +1,11 @@
 import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
-import { Table, TBody, TD, TH, THead, TR } from '../components';
-
-const data = [
-  {
-    name: 'Jack',
-    id: 'iam1',
-    currentValue: 123,
-    initialValue: 456,
-  },
-  {
-    name: 'Luice',
-    id: 'iam2',
-    currentValue: 123,
-    initialValue: 456,
-  },
-  {
-    name: 'Tom',
-    id: 'iam3',
-    currentValue: 123,
-    initialValue: 456,
-  },
-  {
-    name: 'Jade',
-    id: 'iam',
-    currentValue: 123,
-    initialValue: 456,
-  },
-];
+import { useState } from 'react';
+import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../components';
 
 const Home: NextPage<{ accounts: account[] }> = ({ accounts }) => {
+  const [open, setOpen] = useState(false);
+  const [accountName, setAccountName] = useState('');
   return (
     <div className='container mx-auto py-6'>
       <Table>
@@ -41,7 +17,7 @@ const Home: NextPage<{ accounts: account[] }> = ({ accounts }) => {
           </TR>
         </THead>
         <TBody>
-          {data.map(({ id, name, initialValue, currentValue }) => (
+          {accounts.map(({ id, name, initialValue, currentValue }) => (
             <TR
               key={id}
             >
@@ -52,6 +28,40 @@ const Home: NextPage<{ accounts: account[] }> = ({ accounts }) => {
           ))}
         </TBody>
       </Table>
+      <Modal
+        open={open}
+        id="exampleModalCenter"
+        title="New Account"
+        onConfirm={() => console.log(accountName)}
+        onCancel={() => setOpen(false)}
+      >
+        <Input
+          value={accountName}
+          onChange={setAccountName}
+          label="Account Name"
+        />
+      </Modal>
+      <button
+        type="button" className="px-6
+      py-2.5
+      bg-blue-600
+      text-white
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      rounded
+      shadow-md
+      hover:bg-blue-700 hover:shadow-lg
+      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+      active:bg-blue-800 active:shadow-lg
+      transition
+      duration-150
+      ease-in-out" 
+        onClick={() => setOpen(true)}
+      >
+        Hello
+      </button>
     </div>
   );
 };
