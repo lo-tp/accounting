@@ -1,11 +1,22 @@
 import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { useQuery } from 'react-query';
 import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../components';
 
-const Home: NextPage<{ accounts: account[] }> = ({ accounts }) => {
+async function fetchAccount() {
+
+  const res = await fetch('http://localhost:12000/api/account');
+  const { data } = await res.json();
+  return data;
+}
+
+const Home: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
+  const { data: accounts } = useQuery(['accounts'], fetchAccount, {
+    initialData: originalAccounts,
+  });
   return (
     <div className='container mx-auto py-6'>
       <Table>
