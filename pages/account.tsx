@@ -11,6 +11,19 @@ async function fetchAccount() {
   return data;
 }
 
+async function createAccount(name: string, initialValue = 0, currentValue = 0) {
+  const res = await fetch('http://localhost:12000/api/account', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, initialValue, currentValue }),
+  });
+  const { data } = await res.json();
+  return data;
+
+}
+
 const Home: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
@@ -43,7 +56,12 @@ const Home: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts })
         open={open}
         id="exampleModalCenter"
         title="New Account"
-        onConfirm={() => console.log(accountName)}
+        onConfirm={() => {
+          createAccount(accountName).then(account=>{
+            setOpen(false);
+            console.log(account);
+          });
+        }}
         onCancel={() => setOpen(false)}
       >
         <Input
