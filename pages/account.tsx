@@ -3,25 +3,25 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../components';
+import { get, post } from '../lib/request';
 
 async function fetchAccount() {
-
-  const res = await fetch('http://localhost:12000/api/account');
-  const { data } = await res.json();
-  return data;
+  return get({
+    path:'account',
+  });
 }
 
 async function createAccount(name: string, initialValue = 0, currentValue = 0) {
-  const res = await fetch('http://localhost:12000/api/account', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  return post<any, account>(
+    {
+      path:'account',
+      body:{
+        name,
+        initialValue,
+        currentValue,
+      },
     },
-    body: JSON.stringify({ name, initialValue, currentValue }),
-  });
-  const { data } = await res.json();
-  return data;
-
+  );
 }
 
 const Home: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
