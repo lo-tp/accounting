@@ -54,7 +54,6 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
       </Table>
       <Modal
         open={open}
-        id="exampleModalCenter"
         title="New Account"
         onConfirm={() => {
           createAccount(accountName).then(account=>{
