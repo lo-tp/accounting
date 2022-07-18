@@ -2,11 +2,12 @@ interface GetProps {
   path: string;
 }
 
-const URL = 'http://localhost:12000/api/';
+const URL = process.env.NEXT_PUBLIC_URL;
 
 export async function get<T=any>({
   path,
 }: GetProps) {
+  console.log(URL);
   const res = await fetch(`${URL}/${path}`);
   const { data } = await res.json();
   return data as T;
