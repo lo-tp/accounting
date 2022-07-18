@@ -1,7 +1,7 @@
 import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../../components';
 import { get, post } from '../../lib/request';
 import { queryClient } from '../../pages/_app';
@@ -12,7 +12,11 @@ export async function fetchAccount() {
   });
 }
 
-async function createAccount(name: string, initialValue = 0, currentValue = 0) {
+async function createAccount({ name, initialValue = 0, currentValue = 0 }: {
+  name: string;
+  initialValue?: number;
+  currentValue?: number;
+}) {
   await post<any, account>(
     {
       path:'account',
@@ -23,7 +27,6 @@ async function createAccount(name: string, initialValue = 0, currentValue = 0) {
       },
     },
   );
-  queryClient.invalidateQueries(['accounts']);
 }
 
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
@@ -31,6 +34,12 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
   const [accountName, setAccountName] = useState('');
   const { data: accounts } = useQuery(['accounts'], fetchAccount, {
     initialData: originalAccounts,
+  });
+  const newAccountMutation = useMutation(createAccount, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['accounts']);
+      setOpen(false);
+    },
   });
   return (
     <div className='container mx-auto py-6'>
@@ -58,10 +67,7 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
         open={open}
         title="New Account"
         onConfirm={() => {
-          createAccount(accountName).then(account=>{
-            setOpen(false);
-            console.log(account);
-          });
+          newAccountMutation.mutate( { name:accountName } );
         }}
         onCancel={() => setOpen(false)}
       >
