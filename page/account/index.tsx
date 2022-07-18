@@ -2,37 +2,15 @@ import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
+import { createAccount, getAccount } from '../../apis/account';
 import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../../components';
-import { get, post } from '../../lib/request';
 import { queryClient } from '../../pages/_app';
 
-export async function fetchAccount() {
-  return get({
-    path:'account',
-  });
-}
-
-async function createAccount({ name, initialValue = 0, currentValue = 0 }: {
-  name: string;
-  initialValue?: number;
-  currentValue?: number;
-}) {
-  await post<any, account>(
-    {
-      path:'account',
-      body:{
-        name,
-        initialValue,
-        currentValue,
-      },
-    },
-  );
-}
 
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
-  const { data: accounts } = useQuery(['accounts'], fetchAccount, {
+  const { data: accounts } = useQuery(['accounts'], getAccount, {
     initialData: originalAccounts,
   });
   const newAccountMutation = useMutation(createAccount, {
