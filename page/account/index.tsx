@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../../components';
 import { get, post } from '../../lib/request';
+import { queryClient } from '../../pages/_app';
 
 export async function fetchAccount() {
   return get({
@@ -12,7 +13,7 @@ export async function fetchAccount() {
 }
 
 async function createAccount(name: string, initialValue = 0, currentValue = 0) {
-  return post<any, account>(
+  await post<any, account>(
     {
       path:'account',
       body:{
@@ -22,6 +23,7 @@ async function createAccount(name: string, initialValue = 0, currentValue = 0) {
       },
     },
   );
+  queryClient.invalidateQueries(['accounts']);
 }
 
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
