@@ -1,11 +1,25 @@
+/** eslint-disable react/jsx-no-undef */
 import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { createAccount, getAccount } from '../../apis/account';
-import { Input, Modal, Table, TBody, TD, TH, THead, TR } from '../../components';
+import { Modal, Input, Table } from '../../components/';
 import { queryClient } from '../../pages/_app';
 
+
+const config = [
+  {
+    id: 'name',
+    text: 'Name',
+  }, {
+    id: 'currentValue',
+    text: 'Current Value',
+  }, {
+    id: 'initialValue',
+    text: 'Initial Value',
+  },
+];
 
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
@@ -21,26 +35,7 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
   });
   return (
     <div className='mx-auto'>
-      <Table>
-        <THead>
-          <TR>
-            <TH >name</TH>
-            <TH >Current Value</TH>
-            <TH >Initial Value</TH>
-          </TR>
-        </THead>
-        <TBody>
-          {accounts.map(({ id, name, initialValue, currentValue }) => (
-            <TR
-              key={id}
-            >
-              <TD > {name}</TD>
-              <TD > {currentValue}</TD>
-              <TD > {initialValue}</TD>
-            </TR>
-          ))}
-        </TBody>
-      </Table>
+      <Table config={config} data={accounts}/>
       <Modal
         open={open}
         title="New Account"
