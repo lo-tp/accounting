@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { FC, useMemo } from 'react';
 
 export const LoadingIndicator: FC<{ loading: boolean }> = ({ loading }) => {
-  const className = useMemo(() => classNames('flex fixed h-full w-full justify-center items-center', { hidden: !loading }), [loading]);
+  const className = useMemo(() => classNames('flex z-20 fixed h-full w-full justify-center items-center', { hidden: !loading }), [loading]);
   return (
     <div className={className}>
       <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">

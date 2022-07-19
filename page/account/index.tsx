@@ -35,10 +35,21 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
     }
 
   }, [setLoading]);
+  const wrappedCreateAccount = useCallback(async (arg: Parameters<typeof createAccount>[0]) => {
+    setLoading(true);
+    try {
+      const res = await createAccount(arg);
+      setOpen(false);
+      return res;
+    } finally {
+      setLoading(false);
+    }
+
+  }, [setLoading, setOpen]);
   const { data: accounts } = useQuery(['accounts'], wrappedGetAccount, {
     initialData: originalAccounts,
   });
-  const newAccountMutation = useMutation(createAccount, {
+  const newAccountMutation = useMutation(wrappedCreateAccount, {
     onSuccess: () => {
       queryClient.invalidateQueries(['accounts']);
       setOpen(false);

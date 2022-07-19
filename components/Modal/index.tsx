@@ -8,7 +8,7 @@ export const Modal: FC<{
   open: boolean;
   children: ReactNode 
 }> = ({ onCancel, children, title, onConfirm, open })  => {
-  const mainClass = classNames('modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto', { show:open });
+  const mainClass = classNames('modal z-10 fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto', { show:open });
   const mainStyle = useMemo(() => ({ display:open ? 'block' : 'none' }), [open]);
   return (
     <div style={mainStyle} className={mainClass} tabIndex={-1} aria-labelledby="exampleModalCenterTitle" aria-hidden="true" aria-modal={open} role="dialog">
