@@ -1,10 +1,11 @@
 /** eslint-disable react/jsx-no-undef */
 import type { account } from '@prisma/client';
 import type { NextPage } from 'next';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { createAccount, getAccount } from '../../apis/account';
 import { Modal, Input, Table } from '../../components/';
+import { useGlobalContext } from '../../hook';
 import { queryClient } from '../../pages/_app';
 
 
@@ -24,7 +25,17 @@ const config = [
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
-  const { data: accounts } = useQuery(['accounts'], getAccount, {
+  const { setLoading } = useGlobalContext();
+  const wrappedGetAccount = useCallback(async () => {
+    setLoading(true);
+    try {
+      return await getAccount();
+    } finally {
+      setLoading(false);
+    }
+
+  }, [setLoading]);
+  const { data: accounts } = useQuery(['accounts'], wrappedGetAccount, {
     initialData: originalAccounts,
   });
   const newAccountMutation = useMutation(createAccount, {
