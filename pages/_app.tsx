@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Main, SideNavigtion } from '../layout';
+import { LoadingIndicator } from '../components';
 export const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <div className='bg-gray-50 h-full'>
+        <LoadingIndicator/>
         <Main>
           <SideNavigtion/>
           <div className='grow px-8 pt-8'>
