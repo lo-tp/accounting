@@ -35,23 +35,10 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
   });
   return (
     <div className='mx-auto'>
-      <Table config={config} data={accounts}/>
-      <Modal
-        open={open}
-        title="New Account"
-        onConfirm={() => {
-          newAccountMutation.mutate( { name:accountName } );
-        }}
-        onCancel={() => setOpen(false)}
-      >
-        <Input
-          value={accountName}
-          onChange={setAccountName}
-          label="Account Name"
-        />
-      </Modal>
-      <button
-        type="button" className="px-6
+      <div className='flex pb-4'>
+        <h1 className='font-bold text-2xl grow'>Accounts</h1>
+        <button
+          type="button" className="px-6
       py-2.5
       bg-blue-600
       text-white
@@ -67,10 +54,27 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
       transition
       duration-150
       ease-in-out" 
-        onClick={() => setOpen(true)}
+          onClick={() => setOpen(true)}
+        >
+          Hello
+        </button>
+
+      </div>
+      <Table config={config} data={accounts}/>
+      <Modal
+        open={open}
+        title="New Account"
+        onConfirm={() => {
+          newAccountMutation.mutate( { name:accountName } );
+        }}
+        onCancel={() => setOpen(false)}
       >
-        Hello
-      </button>
+        <Input
+          value={accountName}
+          onChange={setAccountName}
+          label="Account Name"
+        />
+      </Modal>
     </div>
   );
 };
