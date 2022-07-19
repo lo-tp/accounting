@@ -20,7 +20,7 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
     },
   });
   return (
-    <div className='container mx-auto py-6'>
+    <div className='mx-auto'>
       <Table>
         <THead>
           <TR>

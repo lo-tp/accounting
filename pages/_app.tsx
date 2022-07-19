@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Main, SideNavigtion } from '../layout';
 export const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -14,7 +15,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      <div className='bg-gray-50 h-full'>
+        <Main>
+          <SideNavigtion/>
+          <div className='grow px-8 pt-8'>
+            <Component {...pageProps} />
+          </div>
+        </Main>
+      </div>
     </QueryClientProvider >
   );
 }
