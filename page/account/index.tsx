@@ -78,7 +78,7 @@ export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalA
       ease-in-out" 
           onClick={() => setOpen(true)}
         >
-          Hello
+          Create New Account
         </button>
 
       </div>
