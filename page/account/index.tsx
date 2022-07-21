@@ -25,32 +25,32 @@ const config = [
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
-  const { showToast, setLoading } = useGlobalContext();
+  const globalContext = useGlobalContext();
   const wrappedGetAccount = useCallback(async () => {
-    setLoading(true);
+    globalContext.loadingIndicatorRef.current?.setLoading(true);
     try {
       return await getAccount();
     } catch {
-      showToast({ text:'Something Went Wrong When Fetching Accounts Please Try Again Later' });
+      globalContext.toastRef.current?.showToast({ text:'Something Went Wrong When Fetching Accounts Please Try Again Later' });
     } finally {
-      setLoading(false);
+      globalContext.loadingIndicatorRef.current?.setLoading(false);
     }
 
-  }, [setLoading, showToast]);
+  }, [globalContext]);
   const wrappedCreateAccount = useCallback(async (arg: Parameters<typeof createAccount>[0]) => {
-    setLoading(true);
+    globalContext.loadingIndicatorRef.current?.setLoading(true);
     try {
       const res = await createAccount(arg);
       setOpen(false);
       return res;
     } catch {
-      showToast({ text:'Something Went Wrong When Creating the New Account Please Try Again Later' });
+      globalContext.toastRef.current?.showToast({ text:'Something Went Wrong When Creating the New Account Please Try Again Later' });
     } finally {
       setAccountName('');
-      setLoading(false);
+      globalContext.loadingIndicatorRef.current?.setLoading(false);
     }
 
-  }, [setLoading, setOpen, setAccountName, showToast]);
+  }, [setOpen, setAccountName, globalContext]);
   const { data: accounts } = useQuery(['accounts'], wrappedGetAccount, {
     initialData: originalAccounts,
   });

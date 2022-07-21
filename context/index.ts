@@ -1,9 +1,15 @@
-import { createContext } from 'react';
+import { createContext, RefObject } from 'react';
+import type { LoadingIndicatorRef, ToastRef } from '../components';
 
 interface Context {
-  setLoading: (loading: boolean)=> void 
-  showToast: (arg: { text: string })=> void 
+  loadingIndicatorRef: RefObject<LoadingIndicatorRef>;
+  toastRef: RefObject<ToastRef>
 }
 
-//@ts-ignore
-export const globalContext = createContext<Context>();
+const noop = () => {};
+const initialValue = {
+  loadingIndicatorRef: { current:
+   { setLoading: noop } }, toastRef:{ current: { showToast: noop } },
+};
+
+export const globalContext = createContext<Context>(initialValue);
