@@ -25,27 +25,32 @@ const config = [
 export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
-  const { setLoading } = useGlobalContext();
+  const { showToast, setLoading } = useGlobalContext();
   const wrappedGetAccount = useCallback(async () => {
     setLoading(true);
     try {
       return await getAccount();
+    } catch {
+      showToast({ text:'Something Went Wrong When Fetching Accounts Please Try Again Later' });
     } finally {
       setLoading(false);
     }
 
-  }, [setLoading]);
+  }, [setLoading, showToast]);
   const wrappedCreateAccount = useCallback(async (arg: Parameters<typeof createAccount>[0]) => {
     setLoading(true);
     try {
       const res = await createAccount(arg);
       setOpen(false);
       return res;
+    } catch {
+      showToast({ text:'Something Went Wrong When Creating the New Account Please Try Again Later' });
     } finally {
+      setAccountName('');
       setLoading(false);
     }
 
-  }, [setLoading, setOpen]);
+  }, [setLoading, setOpen, setAccountName, showToast]);
   const { data: accounts } = useQuery(['accounts'], wrappedGetAccount, {
     initialData: originalAccounts,
   });
