@@ -18,6 +18,14 @@ export const queryClient = new QueryClient({
   },
 });
 
+const pages = [{
+  title: 'Transaction',
+  url: '/transaction',
+}, {
+  title: 'Accounting',
+  url: '/account',
+}];
+
 function MyApp({ Component, pageProps }: AppProps) {
   const toastRef = useRef < ToastRef >(null);
   const loadingIndicatorRef = useRef <LoadingIndicatorRef>(null);
@@ -42,7 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <LoadingIndicator ref={loadingIndicatorRef}/>
           <Toast  ref={toastRef}/>
           <Main>
-            <SideNavigtion/>
+            <SideNavigtion pages={pages}/>
             <div className='grow px-8 pt-8'>
               <Component {...pageProps} />
             </div>
