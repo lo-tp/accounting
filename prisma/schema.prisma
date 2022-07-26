@@ -11,5 +11,6 @@ model account {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   currentValue Float
   initialValue Float
-  name         String
+  name         String @unique
 }
+
