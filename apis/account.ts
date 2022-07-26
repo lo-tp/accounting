@@ -1,4 +1,4 @@
-import { account } from '@prisma/client';
+import type { Account } from '@prisma/client';
 import { get, post } from '../lib/request';
 
 export async function getAccount() {
@@ -12,7 +12,7 @@ export async function createAccount({ name, initialValue = 0, currentValue = 0 }
   initialValue?: number;
   currentValue?: number;
 }) {
-  await post<any, account>(
+  await post<any, Account>(
     {
       path:'account',
       body:{

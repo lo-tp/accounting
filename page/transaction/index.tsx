@@ -1,17 +1,26 @@
 import type { Account } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';
+import { createTransaction } from '../../apis/transaction';
 import { Modal, Input, Select } from '../../components';
 
 export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => {
   const [open, setOpen] = useState(true);
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(0);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const options = useMemo(() => accounts.map(({ id, name }) => ({
     value: id,
     text: name,
   })), [accounts]);
+  console.log(options);
+  const onConfirm = () => {
+    createTransaction({
+      amount,
+      from,
+      to,
+    });
+  };
 
   return (<div className='mx-auto'>
     <div className='flex pb-4'>
@@ -41,7 +50,7 @@ export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => 
       <Modal
         open={open}
         title="New Transaction"
-        onConfirm={console.log}
+        onConfirm={onConfirm}
         onCancel={() => setOpen(false)}
       >
         <Input

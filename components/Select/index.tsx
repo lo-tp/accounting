@@ -17,6 +17,7 @@ export const Select = ({ value, onChange, options, label }: Props) => {
   const innerOnChange: ChangeEventHandler<HTMLSelectElement> = useCallback((e) => {
     onChange(e.currentTarget.value);
   }, [onChange]);
+  console.log(options);
 
   return (
     <div className="flex justify-center">
@@ -46,7 +47,7 @@ export const Select = ({ value, onChange, options, label }: Props) => {
       focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example"
         >
           {options.map(({ text, value:optionValue }) =>(
-            <option key={value} value={optionValue}>{text}</option>
+            <option key={optionValue} value={optionValue}>{text}</option>
           ))
         }
         </select>
