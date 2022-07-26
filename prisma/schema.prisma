@@ -7,10 +7,23 @@ datasource db {
   url      = env("MONGODB_URI")
 }
 
-model account {
+model Account {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   currentValue Float
   initialValue Float
   name         String @unique
+
+  froms Transaction[] @relation(name: "from")
+  tos   Transaction[] @relation(name: "to")
 }
 
+model Transaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount    Float
+  createdAt DateTime @default(now())
+
+  from   Account @relation(name: "from", fields: [fromId], references: [id])
+  fromId String  @db.ObjectId
+  to     Account @relation(name: "to", fields: [toId], references: [id])
+  toId   String  @db.ObjectId
+}
