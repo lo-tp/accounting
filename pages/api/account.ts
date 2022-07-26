@@ -3,12 +3,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { createSuccessfulResponseData } from '../../lib/data';
 import type { ResponseData } from '../../lib/data';
 import { prisma } from '../../lib/mongodb';
-import { account } from '@prisma/client';
+import type { Account } from '@prisma/client';
 
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData<account[] | account>>,
+  res: NextApiResponse<ResponseData<Account[] | Account>>,
 ) {
   res.setHeader('Content-Type', 'application/json');
   if (req.method === 'GET') {
