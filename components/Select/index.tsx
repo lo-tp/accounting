@@ -1,4 +1,4 @@
-import { ChangeEventHandler, useCallback } from 'react';
+import { ChangeEventHandler, useCallback, useEffect } from 'react';
 
 interface Option {
   value: string;
@@ -17,7 +17,12 @@ export const Select = ({ value, onChange, options, label }: Props) => {
   const innerOnChange: ChangeEventHandler<HTMLSelectElement> = useCallback((e) => {
     onChange(e.currentTarget.value);
   }, [onChange]);
-  console.log(options);
+  useEffect(() => {
+    if (!value && options.length) {
+      onChange(options[0].value);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex justify-center">
