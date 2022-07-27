@@ -1,27 +1,16 @@
 import type { Account as AccountType } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useCallback, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
+import { Table } from './Table';
 import { createAccount } from '../../apis/account';
-import { Modal, Input, Table } from '../../components/';
+import { Modal, Input } from '../../components/';
 import { useGlobalContext } from '../../hook';
 import { queryClient } from '../../pages/_app';
 
 
-const config = [
-  {
-    id: 'name',
-    text: 'Name',
-  }, {
-    id: 'currentValue',
-    text: 'Current Value',
-  }, {
-    id: 'initialValue',
-    text: 'Initial Value',
-  },
-];
 
-export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts: originalAccounts }) => {
+export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
   const globalContext = useGlobalContext();
@@ -36,9 +25,6 @@ export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts: origi
     }
   }, [setOpen, setAccountName, globalContext]);
 
-  const { data: accounts } = useQuery(['accounts'], globalContext.getAccount, {
-    initialData: originalAccounts,
-  });
   const newAccountMutation = useMutation(wrappedCreateAccount, {
     onSuccess: () => {
       queryClient.invalidateQueries(['accounts']);
@@ -72,7 +58,7 @@ export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts: origi
         </button>
 
       </div>
-      <Table config={config} data={accounts}/>
+      <Table accounts={accounts}/>
       <Modal
         open={open}
         title="New Account"
