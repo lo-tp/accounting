@@ -26,5 +26,8 @@ export default async function handler(
       },
     });
     res.status(200).json(createSuccessfulResponseData(newTransaction));
+  } else if (req.method === 'GET') {
+    const transactions = await prisma.transaction.findMany({ include: { from: true, to: true } });
+    res.status(200).json(createSuccessfulResponseData( transactions));
   }
 }

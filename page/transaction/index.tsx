@@ -1,10 +1,25 @@
-import type { Account } from '@prisma/client';
+import type { Account, Transaction as TransactionType } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 import { createTransaction } from '../../apis/transaction';
-import { Modal, Input, Select } from '../../components';
+import { Table, Modal, Input, Select } from '../../components';
 
-export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => {
+const config = [
+  {
+    id: 'amount',
+    text: 'Amount',
+  }, {
+    id: 'fromName',
+    text: 'From',
+  }, {
+    id: 'toName',
+    text: 'To',
+  },
+];
+
+export const Transaction: NextPage<{ transactions: TransactionType[];accounts: Account[] }> = ({ transactions: originalTransactions, accounts }) => {
+  const transactions = useMemo(() => originalTransactions.map( ({ to:{ name: toName }, from:{ name: fromName }, ...rest }) => ({
+    ...rest, toName, fromName })), [originalTransactions]);
   const [open, setOpen] = useState(true);
   const [amount, setAmount] = useState(0);
   const [from, setFrom] = useState('');
@@ -13,7 +28,6 @@ export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => 
     value: id,
     text: name,
   })), [accounts]);
-  console.log(options);
   const onConfirm = () => {
     createTransaction({
       amount,
@@ -47,6 +61,7 @@ export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => 
         Create New Transaction
       </button>
 
+
       <Modal
         open={open}
         title="New Transaction"
@@ -72,6 +87,7 @@ export const Transaction: NextPage<{ accounts: Account[] }> = ({ accounts }) => 
         />
       </Modal>
     </div>
+    <Table config={config} data={transactions}/>
   </div>
   );
 };

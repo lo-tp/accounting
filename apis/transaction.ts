@@ -1,5 +1,12 @@
 import type { Transaction } from '@prisma/client';
-import { post } from '../lib/request';
+import { get, post } from '../lib/request';
+
+export async function getTrsansaction() {
+  return get({
+    path:'transaction',
+  });
+}
+
 
 export async function createTransaction({ amount, from, to }: {
   amount: number;

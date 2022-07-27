@@ -1,5 +1,4 @@
-/** eslint-disable react/jsx-no-undef */
-import type { account } from '@prisma/client';
+import type { Account as AccountType } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useCallback, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
@@ -22,7 +21,7 @@ const config = [
   },
 ];
 
-export const Account: NextPage<{ accounts: account[] }> = ({ accounts: originalAccounts }) => {
+export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts: originalAccounts }) => {
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
   const globalContext = useGlobalContext();
