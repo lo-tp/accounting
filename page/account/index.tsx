@@ -1,36 +1,17 @@
 import type { Account as AccountType } from '@prisma/client';
 import type { NextPage } from 'next';
-import { useCallback, useState } from 'react';
-import { useMutation } from 'react-query';
+import { useCallback, useRef } from 'react';
+import type { ModalRef } from './Modal';
+import { Modal } from './Modal';
 import { Table } from './Table';
-import { createAccount } from '../../apis/account';
-import { Modal, Input } from '../../components/';
-import { useGlobalContext } from '../../hook';
-import { queryClient } from '../../pages/_app';
 
 
 
 export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts }) => {
-  const [open, setOpen] = useState(false);
-  const [accountName, setAccountName] = useState('');
-  const globalContext = useGlobalContext();
-
-  const wrappedCreateAccount = useCallback<typeof createAccount>(async (arg) => {
-    try {
-      const res = await globalContext.createAccount(arg);
-      setOpen(false);
-      return res;
-    } finally {
-      setAccountName('');
-    }
-  }, [setOpen, setAccountName, globalContext]);
-
-  const newAccountMutation = useMutation(wrappedCreateAccount, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accounts']);
-      setOpen(false);
-    },
-  });
+  const modalRef = useRef<ModalRef>(null);
+  const openModal = useCallback(() => {
+    modalRef.current?.open();
+  }, [modalRef]);
   return (
     <div className='mx-auto'>
       <div className='flex pb-4'>
@@ -52,27 +33,14 @@ export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts }) => 
       transition
       duration-150
       ease-in-out" 
-          onClick={() => setOpen(true)}
+          onClick={openModal}
         >
           Create New Account
         </button>
 
       </div>
       <Table accounts={accounts}/>
-      <Modal
-        open={open}
-        title="New Account"
-        onConfirm={() => {
-          newAccountMutation.mutate( { name:accountName } );
-        }}
-        onCancel={() => setOpen(false)}
-      >
-        <Input
-          value={accountName}
-          onChange={setAccountName}
-          label="Account Name"
-        />
-      </Modal>
+      <Modal ref={modalRef} />
     </div>
   );
 };

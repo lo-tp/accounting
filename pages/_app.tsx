@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Main, SideNavigtion } from '../layout';
 import { LoadingIndicator, Toast } from '../components';
