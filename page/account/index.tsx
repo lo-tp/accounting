@@ -2,7 +2,7 @@ import type { Account as AccountType } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useCallback, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { createAccount, getAccount } from '../../apis/account';
+import { createAccount } from '../../apis/account';
 import { Modal, Input, Table } from '../../components/';
 import { useGlobalContext } from '../../hook';
 import { queryClient } from '../../pages/_app';
@@ -25,32 +25,18 @@ export const Account: NextPage<{ accounts: AccountType[] }> = ({ accounts: origi
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
   const globalContext = useGlobalContext();
-  const wrappedGetAccount = useCallback(async () => {
-    globalContext.loadingIndicatorRef.current?.setLoading(true);
-    try {
-      return await getAccount();
-    } catch {
-      globalContext.toastRef.current?.showToast({ text:'Something Went Wrong When Fetching Accounts Please Try Again Later' });
-    } finally {
-      globalContext.loadingIndicatorRef.current?.setLoading(false);
-    }
 
-  }, [globalContext]);
-  const wrappedCreateAccount = useCallback(async (arg: Parameters<typeof createAccount>[0]) => {
-    globalContext.loadingIndicatorRef.current?.setLoading(true);
+  const wrappedCreateAccount = useCallback<typeof createAccount>(async (arg) => {
     try {
-      const res = await createAccount(arg);
+      const res = await globalContext.createAccount(arg);
       setOpen(false);
       return res;
-    } catch {
-      globalContext.toastRef.current?.showToast({ text:'Something Went Wrong When Creating the New Account Please Try Again Later' });
     } finally {
       setAccountName('');
-      globalContext.loadingIndicatorRef.current?.setLoading(false);
     }
-
   }, [setOpen, setAccountName, globalContext]);
-  const { data: accounts } = useQuery(['accounts'], wrappedGetAccount, {
+
+  const { data: accounts } = useQuery(['accounts'], globalContext.getAccount, {
     initialData: originalAccounts,
   });
   const newAccountMutation = useMutation(wrappedCreateAccount, {

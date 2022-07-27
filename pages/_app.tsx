@@ -6,6 +6,7 @@ import { Main, SideNavigtion } from '../layout';
 import { LoadingIndicator, Toast } from '../components';
 import type { LoadingIndicatorRef, ToastRef } from '../components';
 import { globalContext } from '../context';
+import { useGetGlobalContextValue } from '../hook';
 export const queryClient = new QueryClient({
   defaultOptions: {
     mutations: {
@@ -38,10 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 
 
-  const contextValue = useMemo(()=>( {
-    toastRef,
-    loadingIndicatorRef,
-  }), [toastRef, loadingIndicatorRef]);
+  const contextValue = useGetGlobalContextValue({ loadingIndicatorRef, toastRef });
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -1,15 +1,14 @@
 import { createContext, RefObject } from 'react';
+import { createAccount, getAccount } from '../apis/account';
 import type { LoadingIndicatorRef, ToastRef } from '../components';
 
-interface Context {
+export interface GlobalContext {
   loadingIndicatorRef: RefObject<LoadingIndicatorRef>;
   toastRef: RefObject<ToastRef>
+  createAccount: typeof createAccount,
+  getAccount: typeof getAccount,
 }
 
-const noop = () => {};
-const initialValue = {
-  loadingIndicatorRef: { current:
-   { setLoading: noop } }, toastRef:{ current: { showToast: noop } },
-};
 
-export const globalContext = createContext<Context>(initialValue);
+//@ts-ignore
+export const globalContext = createContext<Context>();
