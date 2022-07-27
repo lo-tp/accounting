@@ -3,7 +3,7 @@ import { globalContext } from '../context';
 import type { GlobalContext  } from '../context';
 import { createAccount, getAccount } from '../apis/account';
 
-export const useGlobalContext = () => useContext(globalContext);
+export const useGlobalContext = (): GlobalContext => useContext(globalContext);
 type Arg = Pick<GlobalContext,  'toastRef' | 'loadingIndicatorRef'>;
 type UseGetGlobalContextValue = (arg: Arg)=> GlobalContext;
 
@@ -19,6 +19,7 @@ function useWrapApi({
   loadingIndicatorRef,
   toastRef,
 }: UseWrapApiProp): any {
+  //@ts-ignore
   return useCallback(async (...arg) => {
     loadingIndicatorRef.current?.setLoading(true);
     try {
