@@ -9,10 +9,10 @@ interface Props {
 export const Input: FC<Props> = ({ label, value, onChange }) => {
   const innerOnChange: ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     onChange(e.currentTarget.value);
-  }, [onChange]);
+ }, [onChange]);
   return (
     <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
+      <div className="mb-3 w-64">
         <label
           htmlFor="exampleFormControlInput1" className="form-label inline-block mb-2 text-gray-700"
         >

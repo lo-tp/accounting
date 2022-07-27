@@ -26,7 +26,7 @@ export const Select = ({ value, onChange, options, label }: Props) => {
 
   return (
     <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
+      <div className="mb-3 w-64">
         <label
           className="form-label inline-block mb-2 text-gray-700"
         >
