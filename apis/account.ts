@@ -12,7 +12,7 @@ export async function createAccount({ name, initialValue = 0, currentValue = 0 }
   initialValue?: number;
   currentValue?: number;
 }) {
-  await post<any, Account>(
+  return post<any, Account>(
     {
       path:'account',
       body:{

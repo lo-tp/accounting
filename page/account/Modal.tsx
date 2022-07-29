@@ -1,13 +1,13 @@
 import React, { useState, useCallback, useImperativeHandle } from 'react';
-import { queryClient } from '../../pages/_app';
 import { createAccount } from '../../apis/account';
 import { Modal as ModalComponent, Input } from '../../components/';
 import { useGlobalContext } from '../../hook';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 export interface ModalRef { open: ()=> void }
 
 export const Modal = React.forwardRef<ModalRef>( ( _, ref) => {
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [accountName, setAccountName] = useState('');
   const globalContext = useGlobalContext();
@@ -28,8 +28,10 @@ export const Modal = React.forwardRef<ModalRef>( ( _, ref) => {
   }, [setOpen]);
 
   const newAccountMutation = useMutation(wrappedCreateAccount, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['accounts']);
+    onSuccess: (newAccount) => {
+      queryClient.setQueryData(['accounts'], (old: any) => {
+        return [...old, newAccount];
+      });
       setOpen(false);
     },
   });

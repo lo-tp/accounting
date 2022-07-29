@@ -13,7 +13,7 @@ export async function createTransaction({ amount, from, to }: {
   from: string;
   to: string;
 }) {
-  await post<any, Transaction>(
+  return post<any, Transaction>(
     {
       path:'transaction',
       body:{
