@@ -15,6 +15,7 @@ export default async function handler(
     const { amount, from, to } = req.body;
 
     const newTransaction = await prisma.transaction.create({
+      include: { from: true, to: true },
       data:{
         amount,
         from: {

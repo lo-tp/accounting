@@ -3,6 +3,7 @@ import { createAccount } from '../../apis/account';
 import { Modal as ModalComponent, Input } from '../../components/';
 import { useGlobalContext } from '../../hook';
 import { useMutation, useQueryClient } from 'react-query';
+import { Account } from '@prisma/client';
 
 export interface ModalRef { open: ()=> void }
 
@@ -29,8 +30,8 @@ export const Modal = React.forwardRef<ModalRef>( ( _, ref) => {
 
   const newAccountMutation = useMutation(wrappedCreateAccount, {
     onSuccess: (newAccount) => {
-      queryClient.setQueryData(['accounts'], (old: any) => {
-        return [...old, newAccount];
+      queryClient.setQueryData(['accounts'], (old: Account[] | undefined ) => {
+        return old ? [...old, newAccount] : [newAccount];
       });
       setOpen(false);
     },

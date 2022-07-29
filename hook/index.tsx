@@ -2,6 +2,7 @@ import { useCallback, useContext, useMemo } from 'react';
 import { globalContext } from '../context';
 import type { GlobalContext  } from '../context';
 import { createAccount, getAccount } from '../apis/account';
+import { createTransaction, getTransaction } from '../apis/transaction';
 
 export const useGlobalContext = (): GlobalContext => useContext(globalContext);
 type Arg = Pick<GlobalContext,  'toastRef' | 'loadingIndicatorRef'>;
@@ -39,21 +40,38 @@ export const useGetGlobalContextValue: UseGetGlobalContextValue = (arg) => {
   const wrappedCreateAccount = useWrapApi({
     func: createAccount,
     loadingIndicatorRef,
-    errorMessage:'Something Went Wrong When Creating the New Account Please Try Again Later',
+    errorMessage:'Something Went Wrong When Creating the New Account. Please Try Again Later',
     toastRef,
   });
   const wrappedGetAccount = useWrapApi({
     func: getAccount,
     loadingIndicatorRef,
-    errorMessage:'Something Went Wrong When Fetching Accounts Please Try Again Later',
+    errorMessage:'Something Went Wrong When Fetching Accounts. Please Try Again Later',
     toastRef,
   });
+
+  const wrappedGetTransaction = useWrapApi({
+    func: getTransaction,
+    loadingIndicatorRef,
+    errorMessage:'Something Went Wrong When Fetching Transactions. Please Try Again Later',
+    toastRef,
+  });
+
+  const wrappedCreateTransaction = useWrapApi({
+    func: createTransaction,
+    loadingIndicatorRef,
+    errorMessage:'Something Went Wrong When Creating Transactions. Please Try Again Later',
+    toastRef,
+  });
+
 
   const res = useMemo(() => ({ 
     ...arg,
     createAccount: wrappedCreateAccount,
     getAccount: wrappedGetAccount,
-  }), [arg, wrappedCreateAccount, wrappedGetAccount]);
+    getTransaction: wrappedGetTransaction,
+    createTransaction: wrappedCreateTransaction,
+  }), [arg, wrappedCreateAccount, wrappedGetAccount, wrappedGetTransaction, wrappedCreateTransaction]);
 
   return res;
 };

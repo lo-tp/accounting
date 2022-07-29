@@ -1,40 +1,18 @@
-import type { Account, Transaction as TransactionType } from '@prisma/client';
+import { useRef, useCallback } from 'react';
+import type { Account } from '@prisma/client';
 import type { NextPage } from 'next';
-import { useMemo, useState } from 'react';
-import { createTransaction } from '../../apis/transaction';
-import { Table, Modal, Input, Select } from '../../components';
+import { TransactionQueryType } from '../../type';
+import { Table } from './Table';
+import { Modal } from './Modal';
+import type { ModalRef } from './Modal';
 
-const config = [
-  {
-    id: 'amount',
-    text: 'Amount',
-  }, {
-    id: 'fromName',
-    text: 'From',
-  }, {
-    id: 'toName',
-    text: 'To',
-  },
-];
 
-export const Transaction: NextPage<{ transactions: TransactionType[];accounts: Account[] }> = ({ transactions: originalTransactions, accounts }) => {
-  const transactions = useMemo(() => originalTransactions.map( ({ to:{ name: toName }, from:{ name: fromName }, ...rest }) => ({
-    ...rest, toName, fromName })), [originalTransactions]);
-  const [open, setOpen] = useState(true);
-  const [amount, setAmount] = useState(0);
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
-  const options = useMemo(() => accounts.map(({ id, name }) => ({
-    value: id,
-    text: name,
-  })), [accounts]);
-  const onConfirm = () => {
-    createTransaction({
-      amount,
-      from,
-      to,
-    });
-  };
+export const Transaction: NextPage<{ transactions: TransactionQueryType[];accounts: Account[] }> = ({ transactions, accounts }) => {
+  const modalRef = useRef<ModalRef>(null);
+  const openModal = useCallback(() => {
+    modalRef.current?.open();
+  }, [modalRef]);
+
 
   return (<div className='mx-auto'>
     <div className='flex pb-4'>
@@ -56,38 +34,15 @@ export const Transaction: NextPage<{ transactions: TransactionType[];accounts: A
       transition
       duration-150
       ease-in-out" 
-        onClick={() => setOpen(true)}
+        onClick={openModal}
       >
         Create New Transaction
       </button>
 
 
-      <Modal
-        open={open}
-        title="New Transaction"
-        onConfirm={onConfirm}
-        onCancel={() => setOpen(false)}
-      >
-        <Input
-          value={amount}
-          onChange={setAmount}
-          label="Amount"
-        />
-        <Select 
-          options={options}
-          onChange={setFrom}
-          value={from}
-          label='From'
-        />
-        <Select 
-          options={options}
-          onChange={setTo}
-          value={to}
-          label='To'
-        />
-      </Modal>
+      <Modal ref={modalRef} accounts={accounts}/>
     </div>
-    <Table config={config} data={transactions}/>
+    <Table data={transactions}/>
   </div>
   );
 };

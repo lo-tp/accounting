@@ -1,8 +1,8 @@
-import type { Transaction } from '@prisma/client';
 import { get, post } from '../lib/request';
+import { TransactionQueryType } from '../type';
 
-export async function getTrsansaction() {
-  return get({
+export async function getTransaction() {
+  return get<TransactionQueryType[]>({
     path:'transaction',
   });
 }
@@ -13,7 +13,7 @@ export async function createTransaction({ amount, from, to }: {
   from: string;
   to: string;
 }) {
-  return post<any, Transaction>(
+  return post<any, TransactionQueryType>(
     {
       path:'transaction',
       body:{
